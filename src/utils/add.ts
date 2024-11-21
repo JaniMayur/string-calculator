@@ -1,20 +1,20 @@
-// src/utils/add.ts
-
 export function add(numbers: string): number {
   if (numbers === "") return 0;
 
-  const customDelimiterMatch = numbers.match(/^\/\/(.)\n/);
+  const customDelimiterMatch = numbers.match(/^\/\/(.+)\\n/);
   if (customDelimiterMatch) {
     const delimiter = customDelimiterMatch[1];
+
     numbers = numbers.slice(customDelimiterMatch[0].length);
     return sumNumbers(numbers.split(delimiter));
   }
 
-  // Handle new lines between numbers
-  numbers = numbers.replace(/\n/g, ",");
+  numbers = numbers
+    .replace(/\r?\\n/g, ",")
+    .replace(/,/g, " ")
+    .trim();
 
-  // Split the numbers by commas
-  return sumNumbers(numbers.split(","));
+  return sumNumbers(numbers.split(" "));
 }
 
 function sumNumbers(numbers: string[]): number {
